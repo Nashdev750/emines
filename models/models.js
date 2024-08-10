@@ -109,10 +109,22 @@ const botSchema = new Schema(
         fatherPercentage:{
             type: Number,
             required: false, 
+            default:0.5
         } ,
         investorPercentage:{
             type: Number,
             required: false, 
+            default: 0.5
+        },
+        fatherCoins:{
+            type: Number,
+            required: false, 
+            default: 10
+        } ,
+        investorCoins:{
+            type: Number,
+            required: false, 
+            default: 10
         },
         grantRangeMin:{
             type: Number,

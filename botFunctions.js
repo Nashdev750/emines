@@ -1,5 +1,5 @@
 const sharp = require('sharp');
-const { User } = require('./models/models');
+const { User, Bot } = require('./models/models');
 const { getRandomFutureDate, updateWalletBalance } = require('./utils');
 const { GetUserBalance } = require('./job');
 const { QUESTIONS } = require('./constants/commands');
@@ -78,17 +78,18 @@ const catpchaStep = async (bot, chatId,botConf)=>{
 
 const saveUserData = async (bot, chatId,id,username)=>{
     try {     
+        const conf = await Bot.findOne()
         const user = await User.find({telegramid: chatId}) 
         if(user?.length > 0) return
         const grant = await getRandomFutureDate()
-        const user1 = {telegramid:chatId,telegramusername:username, nextgrant: grant}
+        const user1 = {telegramid:chatId,telegramusername:username,balance:conf.investorCoins, nextgrant: grant}
         if(id) user1.parentid = id
         if(chatId == id) user1.parentid = null
         
         await User.create(user1)
         const parent  = await User.findOne({telegramid:id})
         if(parent?.telegramid){
-            User.findOneAndUpdate({telegramid: id},{balance: parent.balance + 10})
+            User.findOneAndUpdate({telegramid: id},{balance: parent.balance + conf.fatherCoins})
         }
     } catch (error) {
         console.log(error.message)
@@ -242,14 +243,18 @@ const getReaderBoard = async (bot, chatId)=>{
         }
       ];
   
-      const referralStats = await User.aggregate(pipeline);
+      let referralStats = await User.aggregate(pipeline);
+      referralStats = referralStats.sort((a, b) => b.totalReferrals - a.totalReferrals);
+
+      referralStats = referralStats.slice(0, 101);
       for (let i = 0; i < referralStats.length; i++) {
         if(referralStats[i].telegramid == 6046745325){
           referralStats[i].totalReferrals = 0
         }
         
       }
-      const totalusers = referralStats.slice(0,99)
+      referralStats = referralStats.sort((a, b) => b.totalReferrals - a.totalReferrals);
+      const totalusers = referralStats
       let txt = `<b>users with the most referrals:</b>
     
 `

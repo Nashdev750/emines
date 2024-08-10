@@ -12,7 +12,7 @@ const { updateWalletBalance } = require('./utils');
 const { job, reminderJob } = require('./job');
 
 // Replace with your bot token from BotFather
-const token = '';
+const token = '6582095222:AAG0E8BURY4A7GvQZd7AInIFZvS8BDuyOVw';
 const bot = new TelegramBot(token, { polling: true });
 
 
@@ -62,15 +62,8 @@ bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
             delete pending[key]; 
         }
     }
-    console.log(chatId,'===')
-    console.log(userSteps,
-        lastCap,
-        pending,
-        referrals,
-        ingroup,
-        doneReg,
-        accountCheck)
-    await User.findOneAndDelete({telegramid: chatId})
+   
+    // await User.findOneAndDelete({telegramid: chatId})
     handleEvent(msg)
 });
 
