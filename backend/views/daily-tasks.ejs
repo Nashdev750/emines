@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Form</title>
+    <script>
+        function toggleOptions() {
+            const questionSelect = document.getElementById('question');
+            const optionsField = document.getElementById('optionsField');
+            const selectedQuestion = questionSelect.value;
+
+            if (selectedQuestion == 1) {
+                optionsField.style.display = 'none';
+            } else {
+                optionsField.style.display = 'block';
+            }
+        }
+
+        window.onload = function() {
+            toggleOptions(); // Initialize options visibility on page load
+        };
+    </script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+    <!-- Include jQuery and DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+    <header>
+        <ul>
+          <li><a href="/users">Users</a></li>
+          <li><a href="/bot-config">Bot Configurations</a></li>
+          <li><a href="/daily-tasks">Daily Tasks</a></li>
+          <li><a href="/transactions">Transactions</a></li>
+        </ul>
+        <ul>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+    </header>
+    <main>
+    <h1>Create or Update Task</h1>
+    <form action="/tasks/save" method="POST" enctype="multipart/form-data">
+        <label for="question">Question Number:</label>
+        <select id="question" name="question" onchange="toggleOptions()" required>
+            <option value="1" <%= task && task.question == 1 ? 'selected' : '' %>>Question 1</option>
+            <option value="2" <%= task && task.question == 2 ? 'selected' : '' %>>Question 2</option>
+        </select><br><br>
+
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" required><br><br>
+        <% if (task && task.image) { %>
+            <img src="/uploads/<%= task.image %>" alt="Task Image" style="max-width: 200px;"><br><br>
+        <% } %>
+
+        <label for="reward">Reward:</label>
+        <input type="number" id="reward" name="reward" value="<%= task ? task.reward : '' %>" required><br><br>
+
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" value="<%= task ? task.description : '' %>" required><br><br>
+
+        <label for="text">Button Text:</label>
+        <input type="text" id="text" name="text" value="<%= task ? task.text : '' %>" required><br><br>
+
+        <label for="answer">Answer:</label>
+        <input type="text" id="answer" name="answer" value="<%= task ? task.answer : '' %>" required><br><br>
+
+        <div id="optionsField">
+            <label for="options">Options (comma-separated for multiple choice):</label>
+            <input type="text" id="options" name="options" value="<%= task && task.options ? task.options.map(option => option.text).join(', ') : '' %>"><br><br>
+        </div>
+
+        <button type="submit">Save Task</button>
+    </form>
+    <h3>Daily Tasks</h3>
+    <table>
+        <table id="userTable">
+            <thead>
+              <tr>
+                  <th>Task</th>
+                  <th>Description</th>
+                  <th>Answer</th>
+                  <th>Options</th>
+                  <th>Button Text</th>
+                  <th>Reward</th>
+                  <th>Image</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% tasks.forEach(task => { %>
+                <tr>
+                  <td><%= task.question %></td>
+                  <td><%= task.description %></td>
+                  <td><%= task.answer %></td>
+                  <td><%= task.options %></td>
+                  <td><%= task.text %></td>
+                  <td><%= task.reward %></td>
+                  <td><img src="/<%= task.image %>" alt="Current Captcha" width="100"></td>
+                  
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+    </table>
+</main>
+</body>
+</html>
+<script>
+    $(document).ready(function() {
+      $('#userTable').DataTable();
+    });
+  </script>

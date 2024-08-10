@@ -1,0 +1,22 @@
+{
+  "name": "solana",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@solana/spl-token": "^0.4.8",
+    "@solana/web3.js": "^1.95.2",
+    "axios": "^1.7.3",
+    "bs58": "^6.0.0",
+    "mongoose": "^8.5.2",
+    "node-telegram-bot-api": "^0.66.0",
+    "sharp": "^0.33.4",
+    "twitter-api-v2": "^1.17.2"
+  }
+}

@@ -1,0 +1,71 @@
+<!-- Include DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<!-- Include jQuery and DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Users</title>
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+  <header>
+      <ul>
+        <li><a href="/users">Users</a></li>
+        <li><a href="/bot-config">Bot Configurations</a></li>
+        <li><a href="/daily-tasks">Daily Tasks</a></li>
+        <li><a href="/transactions">Transactions</a></li>
+      </ul>
+      <ul>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+  </header>
+    <main>
+      <h1>Users List</h1>
+    <a href="/export-users" class="export-button">Export to Excel</a>
+    <table id="userTable">
+        <thead>
+          <tr>
+            <th>Telegram Username</th>
+            <th>X Username</th>
+            <th>Address</th>
+            <th>Referal Balance</th>
+            <th>Next Grant</th>
+            <th>Joined At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(user => { %>
+            <tr>
+              <td><%= user.telegramusername %></td>
+              <td><%= user.tweeter %></td>
+              <td><%= user.address %></td>
+              <td><%= user.walletbalance %></td>
+              <td><%= user.nextgrant %></td>
+              <td><%= user.createdAt %></td>
+              
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      
+   
+    <a href="/bot-config">Go to Bot Config</a>
+    <a href="/logout">Logout</a>
+    </main>
+</body>
+</html>
+
+<!-- Initialize DataTables -->
+<script>
+    $(document).ready(function() {
+      $('#userTable').DataTable();
+    });
+  </script>

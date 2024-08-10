@@ -1,0 +1,10 @@
+
+const SUBMITDETAILS = 'SUBMITDETAILS'
+const CATPCHA = 'CATPCHA'
+const FOLLOWTWEETER = 'follow'
+const JOINGROUP = 'JOIN'
+const DONE = 'DONE'
+const START = '/start'
+const ADDRESS = 'adress'
+
+module.exports = {START,SUBMITDETAILS, CATPCHA, FOLLOWTWEETER, JOINGROUP, DONE, ADDRESS}
