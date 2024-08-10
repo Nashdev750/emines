@@ -1,6 +1,7 @@
 const { User, Payout, Bot } = require('./models/models');
 const { transferToken } = require('./sendSPL');
 const { getTokenBalance, sendToken } = require('./solana');
+const { getRandomFutureDate } = require('./utils');
 
 const findUsersWithTodayGrant = async () => {
     try {
@@ -17,6 +18,7 @@ const findUsersWithTodayGrant = async () => {
 };
 
 const job = async ()=>{
+    console.log('---starting job---')
     try {
         const users = await findUsersWithTodayGrant()
         const bot = await Bot.findOne()
@@ -99,6 +101,7 @@ const sendRewards = async ()=>{
             try {
                 await transferToken(bot.privatekey,payout.address,payout.amount)
                 await Payout.findByIdAndUpdate({_id:payout._id},{status:true})
+                await User.findOneAndUpdate({telegramid: payout.telegramid},{nextgrant: getRandomFutureDate()})
             } catch (error) {
                 await Payout.findByIdAndUpdate({_id:payout._id},{error:error.message})
             }
@@ -108,5 +111,11 @@ const sendRewards = async ()=>{
       }
 }
 
+const reminderJob = async (bt)=>{
+    const bot = await Bot.findOne()
+    if(!bot?._id) return
+    if(!bot.remindermessage) return
+    bt.sendMessage(-1002083005130, bot.remindermessage)
+}
 
-module.exports = {GetUserBalance, job}
+module.exports = {GetUserBalance, job, reminderJob}

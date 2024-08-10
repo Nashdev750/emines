@@ -123,8 +123,16 @@ const botSchema = new Schema(
             type: Number,
             required: false, 
             default: 60
+        },
+        remindermessage:{
+            type: String,
+            required: false, 
+        },
+        reminderinterval:{
+            type: Number,
+            required: false, 
+            default:86400000
         }
-
     },
     {timestamps:true}
 );
@@ -146,6 +154,7 @@ const TaskTrackSchema = new Schema(
 
     }
 );
+
 
 const optionSchema = new Schema({
     text: {

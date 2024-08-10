@@ -9,9 +9,10 @@ const { Account } = require('@solana/web3.js');
 const { isValidSolanaAddress, getWallet } = require('./solana');
 const { sendChoices, sendQuestions, getTask1, getTask2, handleAnswer } = require('./questions');
 const { updateWalletBalance } = require('./utils');
+const { job, reminderJob } = require('./job');
 
 // Replace with your bot token from BotFather
-const token = '';
+const token = '6582095222:AAG0E8BURY4A7GvQZd7AInIFZvS8BDuyOVw';
 const bot = new TelegramBot(token, { polling: true });
 
 
@@ -44,6 +45,7 @@ const answer = 'pepsi'
 // Step 1: Handle the /start command
 bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
     const chatId = msg.chat.id;
+    if(isChennel(chatId)) return console.log('----channel---')
     console.log(msg.chat.username)
     const referralCode = match[1]; // Extract the referral code
     console.log(referralCode,"--->")
@@ -72,11 +74,13 @@ bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
     handleEvent(msg)
 });
 
+
 // Step 4: Handle user responses
-bot.on('message', async (msg) => {
+bot.on('message', async (msg) => { 
     const chatId = msg.chat.id;
+    if(isChennel(chatId)) return console.log('----channel---')
     console.log(msg.chat.username)
-    if (msg.text.startsWith('/start')) {
+    if (msg?.text?.startsWith('/start')) {
         
         
         return; // Skip further processing
@@ -86,6 +90,10 @@ bot.on('message', async (msg) => {
     handleEvent(msg)
 });
 
+
+const isChennel = (id)=>{
+    return id.toString().includes('-') || id.toString() == '-1002083005130'
+}
 
 // Handle callback queries
 bot.on('callback_query', (callbackQuery) => {
@@ -245,9 +253,9 @@ const handTask = async (msg)=>{
             if(text.toLowerCase().includes('question')){
               const itms = text.split(':')
               if(itms.length == 2){
-               return handleAnswer(bot, chatId, itms[1], 0)
+               return handleAnswer(bot, chatId, itms[1], 1)
               }else if(itms.length == 3){
-                return handleAnswer(bot, chatId, itms[2], 1)
+                return handleAnswer(bot, chatId, itms[2], 2)
               } 
               
             }
@@ -304,22 +312,32 @@ const getKeyboard = async (msg)=>{
 }
 console.log('Bot is running...');
 
-
+let reminderinterval = 1000*60*60*24
 mongoose.connect(`mongodb://127.0.0.1:27017/solana`)
 .then(async ()=>{
     console.log("connected")
+    setInterval(job,1000*60*60*24)
+    
     const [publickey, secretKeyString] = getWallet()
     try {
         const bots = await Bot.find()
-        if(bots.length > 0) return
-        await Bot.create({
-            privatekey: secretKeyString,
-            address: publickey
-        }) 
+        if(bots.length == 0){
+            await Bot.create({
+                privatekey: secretKeyString,
+                address: publickey
+            })
+        }
+         
+
     } catch (error) {
       console.log(error)  
     }
-   
+    
+    setInterval(async ()=>{
+        const botc = await Bot.findOne()
+        reminderinterval = botc.reminderinterval
+        await reminderJob(bot)
+    },reminderinterval)
 });
 
 

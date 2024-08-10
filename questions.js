@@ -100,7 +100,7 @@ const sendChoices = (bot, chatId)=>{
 }
 
 const handleAnswer = async (bot, chatId, answer, question)=>{
-         const task = questions[question]
+         const task = await Task.findOne({question})
          const currentDate = new Date();
          currentDate.setHours(0, 0, 0, 0);
 

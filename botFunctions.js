@@ -81,7 +81,11 @@ const saveUserData = async (bot, chatId,id,username)=>{
         const user = await User.find({telegramid: chatId}) 
         if(user?.length > 0) return
         const grant = await getRandomFutureDate()
-        await User.create({telegramid:chatId,parentid:id?id:6046745325,telegramusername:username, nextgrant: grant})
+        const user1 = {telegramid:chatId,telegramusername:username, nextgrant: grant}
+        if(id) user1.parentid = id
+        if(chatId == id) user1.parentid = null
+        
+        await User.create(user1)
         const parent  = await User.findOne({telegramid:id})
         if(parent?.telegramid){
             User.findOneAndUpdate({telegramid: id},{balance: parent.balance + 10})
@@ -149,24 +153,6 @@ bot.sendMessage(chatId, msg, keyboard);
 
 
 
-const finalStep = async (bot, chatId)=>{
-    const msg = `Thank you for participating in our airdrop and congratulations you have earned 3,000 $SMOKE tokens to your balance. 
-
-Please do not leave any of our social media platforms until the airdrop distribution is completed.
-
-You can collect $SMOKE tokens until August 5, airdrop will take place on August 7.
-
-In addition, you can earn an extra 1000 $SMOKE tokens for each of your friends who join our airdrop using your referral link.
-
-💎 Your referral link:
-https://t.me/smokesolbot?start=6046745325
-
-(click the link to copy)
-
-Send this link to all your friends, you receive 1000 $SMOKE tokens EVERYTIME someone joins using your link.
-
-Happy earnings!`
-}
 
 const finishReg = async (bot, chatId)=>{
 updateWalletBalance(chatId,true)
@@ -257,7 +243,12 @@ const getReaderBoard = async (bot, chatId)=>{
       ];
   
       const referralStats = await User.aggregate(pipeline);
- 
+      for (let i = 0; i < referralStats.length; i++) {
+        if(referralStats[i].telegramid == 6046745325){
+          referralStats[i].totalReferrals = 0
+        }
+        
+      }
       const totalusers = referralStats.slice(0,99)
       let txt = `<b>users with the most referrals:</b>
     

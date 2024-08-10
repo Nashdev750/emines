@@ -58,6 +58,14 @@
             <label for="grantMax">Grant Range (Max):</label>
             <input type="number" id="grantMax" name="grantMax" value="<%= config.grantRangeMax || 0 %>" required>
         </div>
+        <div>
+            <label for="remindermessage">Reminder Message:</label>
+            <input type="text" id="remindermessage" name="remindermessage" value="<%= config.remindermessage || "" %>" required>
+        </div>
+        <div>
+            <label for="reminderinterval">Reminder Interval:</label>
+            <input type="number" id="reminderinterval" name="reminderinterval" value="<%= config.reminderinterval || 0 %>" required>
+        </div>
 
         <div>
             <button type="submit">Save Configuration</button>

@@ -147,7 +147,9 @@ app.get('/bot-config', async (req, res) => {
 
 app.post('/bot-config', upload.single('captcha'), async (req, res) => {
     try {
-        const { captchaText, captchaAnswer, fatherPercentage, investorPercentage, grantMin, grantMax } = req.body;
+        const { captchaText, captchaAnswer, fatherPercentage, investorPercentage, grantMin, grantMax,
+            remindermessage, reminderinterval
+         } = req.body;
         const captchaImagePath = req.file.path;
         console.log(req.file)
         // Process the form data and save it to your database
@@ -159,6 +161,7 @@ app.post('/bot-config', upload.single('captcha'), async (req, res) => {
             investorPercentage: parseFloat(investorPercentage),
             grantRangeMin: parseFloat(grantMin),
             grantRangeMax: parseFloat(grantMax),
+            remindermessage, reminderinterval
         };
         const bot = await Bot.findOne()
         if(bot?._id){

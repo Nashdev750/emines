@@ -1,6 +1,6 @@
 const isUserInChannel = async (bot, chatId) => {
     try {
-        const channelUsername = '@solana_test_g'; // Replace with your channel's username
+        const channelUsername = '-1002083005130'; // Replace with your channel's username
 
         // Step 1: Get the Channel ID using the username
         const chat = await bot.getChat(channelUsername);
