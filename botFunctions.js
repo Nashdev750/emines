@@ -115,7 +115,7 @@ const joinTelegramGroup = async (bot, chatId,mg=undefined)=>{
         },
         parse_mode: 'HTML' 
       };
-    const msg = mg ? mg : `🔘 Join our <a href='https://t.me/solana_test_g'>Telegram channel</a>.
+    const msg = mg ? mg : `🔘 Join our <a href='https://t.me/+9xoYX7DetRFkOWQ0'>Telegram channel</a>.
 
 Then click the "Done" button.`
 bot.sendMessage(chatId, msg, keyboard);
