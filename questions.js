@@ -116,7 +116,7 @@ const handleAnswer = async (bot, chatId, answer, question)=>{
                 question,
                 Date: currentDate
         })
-         if(answer.toLowerCase().trim()==task.answer){
+         if(answer.toLowerCase().trim() == task.answer.toLocaleLowerCase()){
             const user = await User.findOne({telegramid: chatId})
             await User.findByIdAndUpdate({_id:user._id},{balance: user.balance+task.reward})
             return bot.sendMessage(chatId, "✅ Correct!, you earned "+task.reward+" coins for task " +(question+1))
