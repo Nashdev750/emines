@@ -169,7 +169,7 @@ const handleSteps = async (msg)=>{
             if(key in pending){
                 if(!isValidSolanaAddress(msg.text)) return bot.sendMessage(chatId,"Invalid SOL address, Please try again")
                 await UpdateUserAdress(bot, chatId, msg.text)  
-                handleSteps(msg)
+                return finishReg(bot, chatId)
             }else{
                 provideAdress(bot, chatId)
                 pending[key] = ADDRESS
