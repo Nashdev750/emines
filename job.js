@@ -37,9 +37,11 @@ const job = async ()=>{
             for (let j = 0; j < decedants.length; j++) {
                 const decedant = decedants[j];
                 try {
+                    console.log('--sleep 10secs ---')
+                    await sleep(30000)
                     const bal = await getTokenBalance(decedant.address) - decedant.startbalance
                     console.log('--sleep 10secs ---')
-                    await sleep(10000)
+                    await sleep(30000)
                     console.log('decedant bal', bal)
                     if(bal > 0) reward += bal * fp
                 } catch (error) {
