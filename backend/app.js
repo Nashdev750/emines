@@ -1,3 +1,4 @@
+require('dotenv').config(); 
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -247,4 +248,4 @@ app.get('/transactions', async (req, res) => {
 app.listen(3000,() => {
     console.log(`Server started on http://localhost:3000`);
 });
-mongoose.connect(DBCONNECTION)
+mongoose.connect(process.env.CONNECTIONSTRING)
