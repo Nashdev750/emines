@@ -16,7 +16,8 @@ const startRegister = async (bot, chatId)=>{
               ],
               resize_keyboard: true, // Optionally resize the keyboard
               one_time_keyboard: true // Optionally hide the keyboard after a button is pressed
-            }
+            },
+            parse_mode: 'HTML' 
           };
         const imagePath = 'welcome.jpg';
         // Step 2: Resize the image and get it as a buffer

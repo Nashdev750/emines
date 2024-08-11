@@ -71,3 +71,7 @@ button{
     cursor: pointer;
 
 }
+textarea{
+    min-width: 300px;
+    min-height: 250px;
+}
