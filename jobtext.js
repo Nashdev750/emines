@@ -8,4 +8,5 @@ const { DBCONNECTION } = require("./constants/db");
 mongoose.connect(DBCONNECTION)
 .then(async ()=>{
     console.log('connected')
+    job()
 })
