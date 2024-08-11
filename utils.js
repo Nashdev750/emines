@@ -23,7 +23,7 @@ const updateWalletBalance = async (chatId,firsttime=false)=>{
         if(!user?._id) return
         const bal = await getTokenBalance(user.address)
         await User.findByIdAndUpdate({_id:user._id},{walletbalance:bal})
-        if(firsttime) await User.findByIdAndUpdate({_id:user._id},{startbalance:bal})
+        if(firsttime || !user.initailupdate) await User.findByIdAndUpdate({_id:user._id},{startbalance:bal,initailupdate:true})
         return bal
     } catch (error) {
         

@@ -45,6 +45,11 @@ const userSchema = new Schema(
             required: false,
             default: ""
         },
+        initailupdate:{
+            type: Boolean,
+            required: false,
+            default: false
+        },
         totalReferrals: { type: Number, default: 0 }
     },
     {timestamps:true}
