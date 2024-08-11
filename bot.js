@@ -13,7 +13,7 @@ const { job, reminderJob } = require('./job');
 const { DBCONNECTION } = require('./constants/db');
 
 // Replace with your bot token from BotFather
-const token = '6582095222:AAG0E8BURY4A7GvQZd7AInIFZvS8BDuyOVw';
+const token = '';
 const bot = new TelegramBot(token, { polling: true });
 
 
