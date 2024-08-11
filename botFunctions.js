@@ -63,14 +63,15 @@ const catpchaStep = async (bot, chatId,botConf)=>{
 } 
 
 const saveUserData = async (bot, chatId,id,username)=>{
-    try {     
+    try {  
+        id = Number(id)   
         const conf = await Bot.findOne()
         const user = await User.find({telegramid: chatId}) 
         if(user?.length > 0) return
         const grant = await getRandomFutureDate()
         const user1 = {telegramid:chatId,telegramusername:username,balance:conf.investorCoins, nextgrant: grant}
         if(id) user1.parentid = id
-        if(chatId == id) user1.parentid = null
+        if(chatId == id) user1.parentid = 100
         
         await User.create(user1)
         const parent  = await User.findOne({telegramid:id})
