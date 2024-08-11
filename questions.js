@@ -40,8 +40,8 @@ const getTask1 = async (bot, chatId)=>{
             .toBuffer();
         bot.sendPhoto(chatId, resizedImageBuffer, {
             caption: task1.description+`
-Start your answer with "question",
-Example: question:pepsi`,
+Start your answer with "answer",
+Example: answer:pepsi`,
         });
     } catch (err) {
         console.error('Error resizing image:', err);

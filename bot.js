@@ -1,3 +1,4 @@
+require('dotenv').config(); 
 const TelegramBot = require('node-telegram-bot-api');
 const { startRegister, catpchaStep, saveUserData, joinTelegramGroup, followTweeter, UpdateUserData, UpdateUserAdress, provideAdress, finishReg, getReaderBoard, getAccount} = require('./botFunctions');
 const { START, SUBMITDETAILS, JOINGROUP, FOLLOWTWEETER, DONE, CATPCHA, ADDRESS } = require('./constants/steps');
@@ -13,7 +14,7 @@ const { job, reminderJob } = require('./job');
 const { DBCONNECTION } = require('./constants/db');
 
 // Replace with your bot token from BotFather
-const token = '';
+const token = process.env.TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
 
@@ -219,6 +220,7 @@ const handleCommands = async (msg)=>{
         default:console.log(text)
             if(
             text.toLowerCase().includes("question") ||
+            text.toLowerCase().includes("answer") ||
              text.toLowerCase().includes(QUESTIONS.toLowerCase())
             ) return handTask(msg)
             const kb = await getKeyboard(msg)
@@ -244,7 +246,9 @@ const handTask = async (msg)=>{
         break;
     
         default:
-            if(text.toLowerCase().includes('question')){
+            if(text.toLowerCase().includes('question') || 
+                text.toLowerCase().includes('answer')
+            ){
               const itms = text.split(':')
               if(itms.length == 2){
                return handleAnswer(bot, chatId, itms[1], 1)
