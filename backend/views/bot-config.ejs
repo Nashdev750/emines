@@ -75,6 +75,14 @@
             <label for="reminderinterval">Reminder Interval:</label>
             <input type="number" id="reminderinterval" name="reminderinterval" value="<%= config.reminderinterval || 0 %>" required>
         </div>
+        <div>
+            <label for="detailstext">Details Text</label>
+            <textarea name="detailstext" id="detailstext"
+            value="<%= config.detailstext || '' %>"
+            required>
+            <%= config.detailstext || '' %>
+            </textarea>
+        </div>
 
         <div>
             <button type="submit">Save Configuration</button>

@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const { DETAILSTEXT } = require("../constants/text");
 
 const userSchema = new Schema(
     {
@@ -149,6 +150,11 @@ const botSchema = new Schema(
             type: Number,
             required: false, 
             default:86400000
+        },
+        detailstext:{
+            type: String,
+            required: false, 
+            default:DETAILSTEXT
         }
     },
     {timestamps:true}
