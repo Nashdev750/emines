@@ -145,8 +145,10 @@ bot.sendMessage(chatId, msg, keyboard);
 const finishReg = async (bot, chatId)=>{
 updateWalletBalance(chatId,true)
 const user = await User.findOne({telegramid:chatId}).lean()
-const msg = `You have 0 referrals ✅
-Balance: 0 🏆 
+const refs = await User.find({parentid:user.telegramid}).lean()
+const bal = await GetUserBalance(user)
+const msg = `You have ${refs.length} referrals ✅
+Balance: ${bal} coins🏆 
 
 Your registered data:
 Telegram: @${user.telegramusername}
