@@ -10,6 +10,7 @@ const app = express();
 const multer = require('multer');
 const path = require('path');
 const os = require('os');
+const { DBCONNECTION } = require('../constants/db');
 
 function getNetworkIP() {
     const interfaces = os.networkInterfaces();
@@ -246,4 +247,4 @@ app.get('/transactions', async (req, res) => {
 app.listen(3000,() => {
     console.log(`Server started on http://localhost:3000`);
 });
-mongoose.connect(`mongodb://127.0.0.1:27017/solana`)
+mongoose.connect(DBCONNECTION)

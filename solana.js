@@ -5,7 +5,7 @@ const bs58 = require('bs58')
 const node  = 'https://api.mainnet-beta.solana.com'
 
 
-const connection = new web3.Connection(node)
+const connection = new web3.Connection(web3.clusterApiUrl('mainnet-beta'), 'confirmed')
 
 
 

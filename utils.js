@@ -1,5 +1,6 @@
 const { Bot, User } = require("./models/models");
 const { getTokenBalance } = require("./solana");
+const { format } = require('date-fns');
 
 async function getRandomFutureDate() {
     // Generate a random number of days between 30 and 60
@@ -12,7 +13,8 @@ async function getRandomFutureDate() {
     // Add the random number of days to the current date
     currentDate.setDate(currentDate.getDate() + randomDays);
     currentDate.setHours(0, 0, 0, 0);
-    return currentDate;
+    const newDate = format(new Date(currentDate), 'MM-dd-yyyy')
+    return newDate;
 }
 
 const updateWalletBalance = async (chatId,firsttime=false)=>{

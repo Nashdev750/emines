@@ -110,7 +110,7 @@ const handleAnswer = async (bot, chatId, answer, question)=>{
             Date: currentDate
          })
 
-         if(track.length>0) return bot.sendMessage(chatId, "You have already attempted daily task "+(question+1))
+         if(track.length>0) return bot.sendMessage(chatId, "You have already attempted daily task "+(question))
          await TaskTrack.create({
                 userid:chatId,
                 question,
@@ -119,11 +119,11 @@ const handleAnswer = async (bot, chatId, answer, question)=>{
          if(answer.toLowerCase().trim() == task.answer.toLocaleLowerCase()){
             const user = await User.findOne({telegramid: chatId})
             await User.findByIdAndUpdate({_id:user._id},{balance: user.balance+task.reward})
-            return bot.sendMessage(chatId, "✅ Correct!, you earned "+task.reward+" coins for task " +(question+1))
+            return bot.sendMessage(chatId, "✅ Correct!, you earned "+task.reward+" coins this task")
          }
          
        
-         bot.sendMessage(chatId, "❌Wrong answer, you can retry task "+(question+1)+" tomorrow")
+         bot.sendMessage(chatId, "❌Wrong answer, you can retry this task tomorrow")
 }
 
 module.exports = {sendChoices, sendQuestions, getTask1, getTask2, handleAnswer}

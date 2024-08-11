@@ -49,7 +49,7 @@ async function transferToken(pk, destinationAddress, amount) {
         fromTokenAccount.address,
         toTokenAccount.address,
         fromWallet.publicKey,
-        amount,
+        amount*1000000000,
         [],
         TOKEN_PROGRAM_ID
     );

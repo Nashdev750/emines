@@ -56,11 +56,11 @@ const payoutSchema = new Schema(
             required: true,        
         },
         telegramusername:{
-            type: Number,
+            type: String,
             required: true,        
         },
         address:{
-            type: Number,
+            type: String,
             required: true,        
         },
         amount:{

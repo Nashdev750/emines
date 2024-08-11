@@ -134,7 +134,7 @@ const followTweeter = (bot, chatId)=>{
             remove_keyboard: true
         }
       };
-    const msg = `🔘 Follow our <a href='https://x.com/eminemssoleng'>X(tweeter) profile</a> like & retweet last post.
+    const msg = `🔘 Follow our <a href='https://x.com/eminemssoleng'>X (Twitter)</a> & like + retweet last post.
 
 Then submit your X username;
 Example: @username`
@@ -168,7 +168,7 @@ SOL Wallet: ${user.address}
 
 Invite as many people (customers) as you want, there’s NO LIMIT. 🚀
 
-More work = More Money 🔥
+More Work = More Money 🔥
 
 🚨 Your referral link:
 https://t.me/Eminemssolbot?start=${chatId}
@@ -268,12 +268,13 @@ const getReaderBoard = async (bot, chatId)=>{
 
 
 const getAccount = async (bot, chatId)=>{
+    updateWalletBalance(chatId)
     const user = await User.findOne({telegramid:chatId}).lean()
     const refs = await User.find({parentid:user.telegramid}).lean()
     const bal = await GetUserBalance(user)
     const msg = `You have ${refs.length} referrals ✅
     
-Balance: ${bal.toFixed(2)} 🏆 
+Balance: ${bal.toFixed(2)} Coins 🏆 
 
 Your registered data:
 Telegram: @${user.telegramusername}
@@ -282,7 +283,7 @@ SOL Wallet: ${user.address}
 
 Invite as many people (customers) as you want, there’s NO LIMIT. 🚀
 
-More work = More Money 🔥
+More Work = More Money 🔥
 
 🚨 Your referral link:
 https://t.me/Eminemssolbot?start=${chatId}

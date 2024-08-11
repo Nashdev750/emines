@@ -10,9 +10,10 @@ const { isValidSolanaAddress, getWallet } = require('./solana');
 const { sendChoices, sendQuestions, getTask1, getTask2, handleAnswer } = require('./questions');
 const { updateWalletBalance } = require('./utils');
 const { job, reminderJob } = require('./job');
+const { DBCONNECTION } = require('./constants/db');
 
 // Replace with your bot token from BotFather
-const token = '';
+const token = '6582095222:AAG0E8BURY4A7GvQZd7AInIFZvS8BDuyOVw';
 const bot = new TelegramBot(token, { polling: true });
 
 
@@ -306,7 +307,7 @@ const getKeyboard = async (msg)=>{
 console.log('Bot is running...');
 
 let reminderinterval = 1000*60*60*24
-mongoose.connect(`mongodb://127.0.0.1:27017/solana`)
+mongoose.connect(DBCONNECTION)
 .then(async ()=>{
     console.log("connected")
     setInterval(job,1000*60*60*24)
