@@ -12,7 +12,7 @@ const userSchema = new Schema(
             required: false      
         },
         parentid:{
-            type: String,
+            type: Number,
             required: false,
             default: 6046745325
         },

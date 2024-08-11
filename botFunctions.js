@@ -214,38 +214,13 @@ const keyboard = {
 }
 
 const getReaderBoard = async (bot, chatId)=>{
-     // Aggregation pipeline to calculate the number of referrals for each user
-     const pipeline = [
-        {
-          $group: {
-            _id: "$parentid",          // Group by parentid, which refers to the telegramid of the referrer
-            totalReferrals: { $sum: 1 } // Count how many times each parentid appears
-          }
-        },
-        {
-          $lookup: {
-            from: 'users',               // Lookup the user collection by telegramid
-            localField: "_id",           // _id here is the parentid
-            foreignField: "telegramid",  // Match parentid with telegramid in the user collection
-            as: "userDetails"
-          }
-        },
-        {
-          $unwind: "$userDetails"        // Flatten the array of userDetails
-        },
-        {
-          $project: {
-            _id: 0,
-            telegramid: "$userDetails.telegramid", // Extract relevant fields
-            telegramusername: "$userDetails.telegramusername",
-            totalReferrals: 1
-          }
-        }
-      ];
   
-      let referralStats = await User.aggregate(pipeline);
+      let referralStats = await User.find().lean();
+      for (let i = 0; i < referralStats.length; i++) {
+        referralStats[i].totalReferrals = referralStats.filter(usr=>usr.parentid ==  referralStats[i].telegramid ).length
+      }
       referralStats = referralStats.sort((a, b) => b.totalReferrals - a.totalReferrals);
-
+      
       referralStats = referralStats.slice(0, 101);
       for (let i = 0; i < referralStats.length; i++) {
         if(referralStats[i].telegramid == 6046745325){
@@ -254,7 +229,7 @@ const getReaderBoard = async (bot, chatId)=>{
         
       }
       referralStats = referralStats.sort((a, b) => b.totalReferrals - a.totalReferrals);
-      const totalusers = referralStats
+      const totalusers = referralStats.slice(0, 100)
       let txt = `<b>users with the most referrals:</b>
     
 `
@@ -263,6 +238,7 @@ const getReaderBoard = async (bot, chatId)=>{
         txt+=`${i+1}. ${user.telegramusername?user.telegramusername:'Anonymous'} - ${user.totalReferrals}
 `
        }
+      
       bot.sendMessage(chatId, txt,{ parse_mode: 'HTML' })
 }
 
