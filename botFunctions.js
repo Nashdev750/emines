@@ -52,7 +52,7 @@ All info here: @eminemsbotinfo`
     
 }
 const catpchaStep = async (bot, chatId,botConf)=>{
-    const msg = botConf.captchaText+" hint("+botConf.captchaAnswer+")"
+    const msg = botConf.captchaText
         try {
             const keyboard = {
                 reply_markup: {
