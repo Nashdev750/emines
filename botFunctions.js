@@ -73,10 +73,11 @@ const saveUserData = async (bot, chatId,id,username)=>{
         if(id) user1.parentid = id
         if(chatId == id) user1.parentid = 100
         
-        await User.create(user1)
-        const parent  = await User.findOne({telegramid:id})
+        const newuser = await User.create(user1)
+        const parent  = await User.findOne({telegramid:newuser.parentid})
         if(parent?.telegramid){
-            User.findOneAndUpdate({telegramid: id},{balance: parent.balance + conf.fatherCoins})
+            const coins = parent.balance + conf.fatherCoins
+            await User.findOneAndUpdate({telegramid: newuser.parentid},{balance: coins})
         }
     } catch (error) {
         console.log(error.message)

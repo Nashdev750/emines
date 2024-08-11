@@ -1,11 +1,11 @@
 const { job, sendRewards } = require("./job");
 const mongoose = require('mongoose');
 const { getRandomFutureDate } = require("./utils");
-const { getReaderBoard } = require("./botFunctions");
+const { getReaderBoard, saveUserData } = require("./botFunctions");
+const { DBCONNECTION } = require("./constants/db");
 
 
-mongoose.connect(``)
+mongoose.connect(DBCONNECTION)
 .then(async ()=>{
     console.log('connected')
-    getReaderBoard()
 })
