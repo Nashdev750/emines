@@ -219,7 +219,7 @@ const getReaderBoard = async (bot, chatId)=>{
         
       }
       referralStats = referralStats.sort((a, b) => b.totalReferrals - a.totalReferrals);
-      const totalusers = referralStats.slice(0, 100)
+      const totalusers = referralStats.slice(0, 20)
       let txt = `<b>users with the most referrals:</b>
     
 `
