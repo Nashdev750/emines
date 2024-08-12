@@ -77,6 +77,7 @@ bot.on('message', async (msg) => {
         try {
             await Channel.create({
                 channelid: chatId,
+                title:msg.chat.title,
                 message:JSON.stringify(msg)
             })
         } catch (error) {

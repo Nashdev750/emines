@@ -185,10 +185,14 @@ const channelSchema = new Schema({
         required: true,
         unique:true
     },
-    message: {
+    title: {
         type: String,
         required: true,
         unique:true
+    },
+    message: {
+        type: String,
+        required: true
     }
 });
 
