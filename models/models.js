@@ -179,6 +179,19 @@ const TaskTrackSchema = new Schema(
 );
 
 
+const channelSchema = new Schema({
+    channelid: {
+        type: Number,
+        required: true,
+        unique:true
+    },
+    message: {
+        type: String,
+        required: true,
+        unique:true
+    }
+});
+
 const optionSchema = new Schema({
     text: {
         type: String,
@@ -223,5 +236,6 @@ const User = model('user',userSchema)
 const Payout = model('payout',payoutSchema)
 const Bot = model('bot',botSchema)
 const TaskTrack = model('tasktrack',TaskTrackSchema)
+const Channel = model('channel',channelSchema)
 
-module.exports = {User, Payout, Bot, TaskTrack, Task}
+module.exports = {User, Payout, Bot, TaskTrack, Task, Channel}

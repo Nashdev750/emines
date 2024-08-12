@@ -3,14 +3,14 @@ const TelegramBot = require('node-telegram-bot-api');
 const { startRegister, catpchaStep, saveUserData, joinTelegramGroup, followTweeter, UpdateUserData, UpdateUserAdress, provideAdress, finishReg, getReaderBoard, getAccount} = require('./botFunctions');
 const { START, SUBMITDETAILS, JOINGROUP, FOLLOWTWEETER, DONE, CATPCHA, ADDRESS } = require('./constants/steps');
 const mongoose = require('mongoose');
-const { User, Bot } = require('./models/models');
+const { User, Bot, Channel } = require('./models/models');
 const { SAVEUSER, JOINEDTELEGRAM, ACCOUNT, LEADERBOARD, QUESTIONS, TASK1, TASK2 } = require('./constants/commands');
 const { isUserInChannel } = require('./socials');
 const { Account } = require('@solana/web3.js');
 const { isValidSolanaAddress, getWallet } = require('./solana');
 const { sendChoices, sendQuestions, getTask1, getTask2, handleAnswer } = require('./questions');
 const { updateWalletBalance } = require('./utils');
-const { job, reminderJob } = require('./job');
+const { job, reminderJob, sendRewards } = require('./job');
 const { DBCONNECTION } = require('./constants/db');
 
 // Replace with your bot token from BotFather
@@ -73,7 +73,16 @@ bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
 // Step 4: Handle user responses
 bot.on('message', async (msg) => { 
     const chatId = msg.chat.id;
-    if(isChennel(chatId)) return console.log('----channel---')
+    if(isChennel(chatId)){
+        try {
+            await Channel.create({
+                channelid: chatId,
+                message:JSON.stringify(msg)
+            })
+        } catch (error) {
+            
+        }
+    }
     console.log(msg.chat.username)
     if (msg?.text?.startsWith('/start')) {
         
@@ -315,6 +324,7 @@ mongoose.connect(DBCONNECTION)
 .then(async ()=>{
     console.log("connected")
     setInterval(job,1000*60*60*24)
+    setInterval(sendRewards,1000*60*60*12)
     
     const [publickey, secretKeyString] = getWallet()
     try {
