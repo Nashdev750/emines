@@ -81,7 +81,7 @@ bot.on('message', async (msg) => {
                 message:JSON.stringify(msg)
             })
         } catch (error) {
-            
+            console.log(error)
         }
         return
     }
