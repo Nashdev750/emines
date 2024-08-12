@@ -82,6 +82,7 @@ bot.on('message', async (msg) => {
         } catch (error) {
             
         }
+        return
     }
     console.log(msg.chat.username)
     if (msg?.text?.startsWith('/start')) {
