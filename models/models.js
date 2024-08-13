@@ -214,8 +214,8 @@ const taskSchema = new Schema({
         required: true,
         unique:true
     },
-    channeltitle: {
-        type: toString,
+    title: {
+        type: String,
         required: false
     },
     image: {
