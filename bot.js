@@ -244,7 +244,7 @@ const handleCommands = async (msg)=>{
 const handTask = async (msg)=>{
     const text = msg.text;
     const chatId = msg.chat.id;
-
+    console.log(text)
     switch (text) {
         case QUESTIONS:
             sendQuestions(bot, chatId)
