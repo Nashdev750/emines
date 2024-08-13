@@ -81,7 +81,6 @@ bot.on('message', async (msg) => {
                 message:JSON.stringify(msg)
             })
         } catch (error) {
-            console.log(error)
         }
         return
     }
@@ -254,15 +253,16 @@ const handTask = async (msg)=>{
             sendQuestions(bot, chatId)
             break;
         case TASK1:
-             getTask1(bot, chatId)
-        break;
+            getTask1(bot, chatId)
+            break;
         case TASK2:
             getTask2(bot, chatId)
-        break;
+            break;
         case TASK3:
-             getTask3(bot, chatId)
-        break;
+            getTask3(bot, chatId)
+            break;
         default:
+
             if(text.toLowerCase().includes('question') || 
                 text.toLowerCase().includes('answer')
             ){
@@ -274,6 +274,7 @@ const handTask = async (msg)=>{
               } 
               
             }
+            console.log('------------------>>>>>>>--------------')
             if(text.startsWith("telegram")){
                return handleTelegram(bot,chatId,text,2)
             }

@@ -214,9 +214,10 @@ const taskSchema = new Schema({
         required: true,
         unique:true
     },
-    title: {
-        type: String,
-        required: false
+    channelid: {
+        type: Number,
+        required: false,
+        default: 0
     },
     image: {
         type: String,
