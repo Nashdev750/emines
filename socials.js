@@ -21,6 +21,25 @@ const isUserInChannel = async (bot, chatId) => {
         return false;
     }
 };
+const isUserInChannel2 = async (bot, chatId, channelUsername) => {
+    try {
+        const channelId = channelUsername
+
+        // Step 2: Check if the user is a member of the channel
+        const chatMember = await bot.getChatMember(channelId, chatId);
+        const status = chatMember.status;
+
+        // Check if the user is a member of the channel
+        if (status === 'member' || status === 'administrator' || status === 'creator') {
+            return true; // User is a member
+        } else {
+            return false; // User is not a member
+        }
+    } catch (error) {
+        console.log('Error checking group membership:', error.message);
+        return false;
+    }
+};
 
 
 const tweeter = ()=>{
@@ -28,4 +47,4 @@ const tweeter = ()=>{
 }
 
 
-module.exports = {isUserInChannel}
+module.exports = {isUserInChannel, isUserInChannel2}

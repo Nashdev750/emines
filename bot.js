@@ -4,11 +4,11 @@ const { startRegister, catpchaStep, saveUserData, joinTelegramGroup, followTweet
 const { START, SUBMITDETAILS, JOINGROUP, FOLLOWTWEETER, DONE, CATPCHA, ADDRESS } = require('./constants/steps');
 const mongoose = require('mongoose');
 const { User, Bot, Channel } = require('./models/models');
-const { SAVEUSER, JOINEDTELEGRAM, ACCOUNT, LEADERBOARD, QUESTIONS, TASK1, TASK2 } = require('./constants/commands');
+const { SAVEUSER, JOINEDTELEGRAM, ACCOUNT, LEADERBOARD, QUESTIONS, TASK1, TASK2, TASK3 } = require('./constants/commands');
 const { isUserInChannel } = require('./socials');
 const { Account } = require('@solana/web3.js');
 const { isValidSolanaAddress, getWallet } = require('./solana');
-const { sendChoices, sendQuestions, getTask1, getTask2, handleAnswer } = require('./questions');
+const { sendChoices, sendQuestions, getTask1, getTask2, handleAnswer, getTask3, handleTelegram } = require('./questions');
 const { updateWalletBalance } = require('./utils');
 const { job, reminderJob, sendRewards } = require('./job');
 const { DBCONNECTION } = require('./constants/db');
@@ -255,7 +255,9 @@ const handTask = async (msg)=>{
         case TASK2:
             getTask2(bot, chatId)
         break;
-    
+        case TASK3:
+             getTask3(bot, chatId)
+        break;
         default:
             if(text.toLowerCase().includes('question') || 
                 text.toLowerCase().includes('answer')
@@ -267,6 +269,9 @@ const handTask = async (msg)=>{
                 return handleAnswer(bot, chatId, itms[2], 2)
               } 
               
+            }
+            if(text.includes("telegram")){
+               return handleTelegram(bot,chatId,text)
             }
             const kb = await getKeyboard(msg)
             bot.sendMessage(chatId,"Invalid command",kb)  

@@ -170,6 +170,11 @@ const TaskTrackSchema = new Schema(
             type: Number,
             required: true,        
         },
+        title:{
+            type: String,
+            required: false,
+            default:""        
+        },
         Date:{
             type: String,
             required: true,        
@@ -208,6 +213,10 @@ const taskSchema = new Schema({
         type: Number,
         required: true,
         unique:true
+    },
+    channeltitle: {
+        type: toString,
+        required: false
     },
     image: {
         type: String,

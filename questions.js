@@ -1,5 +1,6 @@
 const sharp = require('sharp');
-const { User, TaskTrack, Task } = require('./models/models');
+const { User, TaskTrack, Task, Channel } = require('./models/models');
+const { isUserInChannel, isUserInChannel2 } = require('./socials');
 
 const questions = [
     {
@@ -73,6 +74,34 @@ const getTask2 = async (bot, chatId)=>{
       bot.sendMessage(chatId, "Sorry, something went wrong");
   }
 }
+
+const getTask3 = async (bot, chatId)=>{
+    const task3 = await Task.findOne({question:3})
+    try {
+      const imagePath = "backend/public/"+task3.image
+      const resizedImageBuffer = await sharp(imagePath)
+          .resize({ height: 500 }) 
+          .toBuffer();
+
+      const options = {
+            reply_markup: {
+                keyboard: [{
+                    text: "Done ✅",
+                    callback_data: "telegram:"+task3.title
+                }]
+            },
+             parse_mode: 'HTML'
+      };    
+      bot.sendPhoto(chatId, resizedImageBuffer, {
+          caption: task3.description,
+          ...options
+      });
+  } catch (err) {
+      console.error('Error resizing image:', err);
+      bot.sendMessage(chatId, "Sorry, something went wrong");
+  }
+}
+
 const sendQuestions = async (bot, chatId)=>{
     const tasks = await Task.find().lean()
     const options = {
@@ -81,7 +110,8 @@ const sendQuestions = async (bot, chatId)=>{
                 text: q.text,
                 callback_data: "question:"+q.question
             }])
-        }
+        },
+        
     };
     bot.sendMessage(chatId, 'Please choose a task', options);
 }
@@ -125,5 +155,38 @@ const handleAnswer = async (bot, chatId, answer, question)=>{
        
          bot.sendMessage(chatId, "❌Wrong answer, you can retry this task tomorrow")
 }
+const handleTelegram = async (bot, chatId, text, question)=>{
+      const task = await Task.findOne({question})
+      const itms = text.split(":")
+      if(itms.length !=2) return
+      const channel = Channel.findOne({title:itms[1]})
+      if(!channel?._id) return
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      const track = await TaskTrack.find({
+        userid:chatId,
+        question,
+        title: itms[1]
+     })
 
-module.exports = {sendChoices, sendQuestions, getTask1, getTask2, handleAnswer}
+      const userInChanel = await isUserInChannel2(bot, chatId, channel.channelid)
+
+      if(!userInChanel) bot.sendMessage(chatId, "You have not joined the channel, please join and try again")
+
+      if(userInChanel && track.length == 0){
+        const user = await User.findOne({telegramid: chatId})
+        await User.findByIdAndUpdate({_id:user._id},{balance: user.balance+task.reward})
+        await TaskTrack.create({
+            userid:chatId,
+            question,
+            title: itms[1],
+            Date: currentDate
+        })
+        return bot.sendMessage(chatId, "✅ Task completed!, you earned "+task.reward+" coins this task")
+      }
+   
+      bot.sendMessage(chatId, "✅ You have already completed this task, please check tomorrow for a different task")
+}
+
+
+module.exports = {sendChoices, sendQuestions, getTask1, getTask2, handleAnswer, getTask3,handleTelegram}
