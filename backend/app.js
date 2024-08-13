@@ -79,7 +79,7 @@ app.get('/users', async (req, res) => {
         return res.redirect('/login');
     }
     // Mock users
-    let users = await User.find().sort({ createdAt: -1 });
+    let users = await User.find({ telegramid: { $ne: 6046745325 } }).sort({ createdAt: -1 });
 
    users = users.map(user => ({
         ...user.toObject(),
