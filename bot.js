@@ -228,13 +228,16 @@ const handleCommands = async (msg)=>{
             
             getAccount(bot, chatId)
             break;     
-        default:console.log(text)
+        default:
+            console.log(text)
             if(
             text.toLowerCase().includes("question") ||
             text.toLowerCase().includes("answer") ||
             text.toLowerCase().includes("telegram") ||
-             text.toLowerCase().includes(QUESTIONS.toLowerCase())
+             text.toLowerCase().includes(QUESTIONS.toLowerCase()
+            )
             ) return handTask(msg)
+            
             const kb = await getKeyboard(msg)
             console.log(kb)
             bot.sendMessage(chatId,"Invalid command",kb)  
@@ -271,8 +274,8 @@ const handTask = async (msg)=>{
               } 
               
             }
-            if(text.includes("telegram")){
-               return handleTelegram(bot,chatId,text)
+            if(text.startsWith("telegram")){
+               return handleTelegram(bot,chatId,text,2)
             }
             const kb = await getKeyboard(msg)
             bot.sendMessage(chatId,"Invalid command",kb)  
