@@ -85,7 +85,7 @@ const getTask3 = async (bot, chatId)=>{
  
       const keyboard = {
         reply_markup: {
-          keyboard: [
+          inline_keyboard: [
           [{ text: '✅ Done',callback_data: "telegram:"+task3.title }]
           ],
           resize_keyboard: true, // Optionally resize the keyboard
