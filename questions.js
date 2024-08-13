@@ -82,21 +82,20 @@ const getTask3 = async (bot, chatId)=>{
       const resizedImageBuffer = await sharp(imagePath)
           .resize({ height: 500 }) 
           .toBuffer();
-
-      const options = {
-            reply_markup: {
-                keyboard: [
-                    [{
-                    text: "Done ✅",
-                    callback_data: "telegram:"+task3.title
-                   }]
-                ]
-            },
-             parse_mode: 'HTML'
-      };    
+ 
+      const keyboard = {
+        reply_markup: {
+          keyboard: [
+          [{ text: '✅ Done',callback_data: "telegram:"+task3.title }]
+          ],
+          resize_keyboard: true, // Optionally resize the keyboard
+          one_time_keyboard: true // Optionally hide the keyboard after a button is pressed
+        },
+        parse_mode: 'HTML' 
+      };  
       bot.sendPhoto(chatId, resizedImageBuffer, {
           caption: task3.description,
-          ...options
+          ...keyboard
       });
   } catch (err) {
       console.error('Error resizing image:', err);
