@@ -232,6 +232,7 @@ const handleCommands = async (msg)=>{
             if(
             text.toLowerCase().includes("question") ||
             text.toLowerCase().includes("answer") ||
+            text.toLowerCase().includes("telegram") ||
              text.toLowerCase().includes(QUESTIONS.toLowerCase())
             ) return handTask(msg)
             const kb = await getKeyboard(msg)
