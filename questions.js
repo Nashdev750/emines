@@ -175,7 +175,7 @@ const handleTelegram = async (bot, chatId, text, question)=>{
       const userInChanel = await isUserInChannel2(bot, chatId, channel.channelid)
       console.log('-----checking user----', userInChanel)
 
-      if(!userInChanel) bot.sendMessage(chatId, "You have not joined the channel, please join and try again")
+      if(!userInChanel) return bot.sendMessage(chatId, "You have not joined the channel, please join and try again")
 
       if(userInChanel && track.length == 0){
         const user = await User.findOne({telegramid: chatId})
