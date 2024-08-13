@@ -206,7 +206,7 @@ app.get('/daily-tasks', async (req, res) => {
 
 // save tasks
 app.post('/tasks/save', upload.single('image'), async (req, res) => {
-    const { question, reward, description, text, answer, options } = req.body;
+    const { question, reward, description,title, text, answer, options } = req.body;
     let image = req.file.filename;
 
     const taskData = {
@@ -214,6 +214,7 @@ app.post('/tasks/save', upload.single('image'), async (req, res) => {
         image: image,
         reward,
         description,
+        title,
         text,
         answer,
         options: options ? options.split(',').map(opt => ({ text: opt.trim() })) : []

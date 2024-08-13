@@ -47,6 +47,7 @@
         <select id="question" name="question" onchange="toggleOptions()" required>
             <option value="1" <%= task && task.question == 1 ? 'selected' : '' %>>Question 1</option>
             <option value="2" <%= task && task.question == 2 ? 'selected' : '' %>>Question 2</option>
+            <option value="3" <%= task && task.question == 3 ? 'selected' : '' %>>Question 3</option>
         </select><br><br>
 
         <label for="image">Image:</label>
@@ -60,6 +61,9 @@
 
         <label for="description">Description:</label>
         <input type="text" id="description" name="description" value="<%= task ? task.description : '' %>" required><br><br>
+        
+        <label for="title">Channel Title:</label>
+        <input type="text" id="title" name="title" value="<%= task ? task.title : '' %>"><br><br>
 
         <label for="text">Button Text:</label>
         <input type="text" id="text" name="text" value="<%= task ? task.text : '' %>" required><br><br>
