@@ -85,10 +85,12 @@ const getTask3 = async (bot, chatId)=>{
 
       const options = {
             reply_markup: {
-                keyboard: [{
+                keyboard: [
+                    [{
                     text: "Done ✅",
                     callback_data: "telegram:"+task3.title
-                }]
+                   }]
+                ]
             },
              parse_mode: 'HTML'
       };    
