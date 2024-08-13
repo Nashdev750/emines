@@ -162,6 +162,7 @@ const handleTelegram = async (bot, chatId, text, question)=>{
       console.log(itms)
       if(itms.length != 2) return
       const channel = Channel.findOne({channelid: itms[1]}) 
+      console.log('--->',channel)
       if(!channel?._id) return bot.sendMessage(chatId, "❌Channel not found, please try again later")
       const currentDate = new Date();
       currentDate.setHours(0, 0, 0, 0);
