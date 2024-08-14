@@ -244,7 +244,21 @@ const taskSchema = new Schema({
         required: false
     }
 });
-
+const logSchema = new Schema({
+    telegramid: {
+        type: Number,
+        required: true
+    },
+    activity: {
+        type: String,
+        required: true
+    },
+    Date: {
+        type: String,
+        required: true
+    },
+});
+const Log = model('log', logSchema);
 const Task = model('task', taskSchema);
 const User = model('user',userSchema)
 const Payout = model('payout',payoutSchema)
@@ -252,4 +266,4 @@ const Bot = model('bot',botSchema)
 const TaskTrack = model('tasktrack',TaskTrackSchema)
 const Channel = model('channel',channelSchema)
 
-module.exports = {User, Payout, Bot, TaskTrack, Task, Channel}
+module.exports = {User, Payout, Bot, TaskTrack, Task, Channel, Log}

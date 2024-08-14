@@ -1,6 +1,18 @@
-const { Bot, User } = require("./models/models");
+const { Bot, User, Log } = require("./models/models");
 const { getTokenBalance } = require("./solana");
 const { format } = require('date-fns');
+
+
+const logActivity = async (chatId,activity="default")=>{
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    const newDate = format(new Date(currentDate), 'MM-dd-yyyy')
+    await Log.create({
+        telegramid:chatId,
+        activity,
+        newDate
+    })
+}
 
 async function getRandomFutureDate() {
     // Generate a random number of days between 30 and 60
@@ -31,4 +43,4 @@ const updateWalletBalance = async (chatId,firsttime=false)=>{
 
 }
 
-module.exports = { getRandomFutureDate, updateWalletBalance}
+module.exports = { getRandomFutureDate, updateWalletBalance, logActivity}

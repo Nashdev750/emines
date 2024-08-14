@@ -9,7 +9,7 @@ const { isUserInChannel } = require('./socials');
 const { Account } = require('@solana/web3.js');
 const { isValidSolanaAddress, getWallet } = require('./solana');
 const { sendChoices, sendQuestions, getTask1, getTask2, handleAnswer, getTask3, handleTelegram } = require('./questions');
-const { updateWalletBalance } = require('./utils');
+const { updateWalletBalance, logActivity } = require('./utils');
 const { job, reminderJob, sendRewards } = require('./job');
 const { DBCONNECTION } = require('./constants/db');
 
@@ -48,9 +48,8 @@ const answer = 'pepsi'
 bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
     const chatId = msg.chat.id;
     if(isChennel(chatId)) return console.log('----channel---')
-    console.log(msg.chat.username)
-    const referralCode = match[1]; // Extract the referral code
-    console.log(referralCode,"--->")
+    logActivity(chatId,"start")
+    const referralCode = match[1];
     if (referralCode != undefined) referrals[msg.chat.id] = referralCode
    
     delete userSteps[chatId]
@@ -84,7 +83,7 @@ bot.on('message', async (msg) => {
         }
         return
     }
-    console.log(msg.chat.username)
+    logActivity(chatId,msg?.text)
     if (msg?.text?.startsWith('/start')) {
         
         
@@ -274,7 +273,6 @@ const handTask = async (msg)=>{
               } 
               
             }
-            console.log('------------------>>>>>>>--------------')
             if(text.startsWith("telegram")){
                return handleTelegram(bot,chatId,text,2)
             }
