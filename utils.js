@@ -10,7 +10,7 @@ const logActivity = async (chatId,activity="default")=>{
     await Log.create({
         telegramid:chatId,
         activity,
-        newDate
+        Date: newDate
     })
 }
 
