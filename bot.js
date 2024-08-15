@@ -1,14 +1,13 @@
 require('dotenv').config(); 
 const TelegramBot = require('node-telegram-bot-api');
 const { startRegister, catpchaStep, saveUserData, joinTelegramGroup, followTweeter, UpdateUserData, UpdateUserAdress, provideAdress, finishReg, getReaderBoard, getAccount} = require('./botFunctions');
-const { START, SUBMITDETAILS, JOINGROUP, FOLLOWTWEETER, DONE, CATPCHA, ADDRESS } = require('./constants/steps');
+const { SUBMITDETAILS, JOINGROUP, FOLLOWTWEETER, DONE, CATPCHA, ADDRESS } = require('./constants/steps');
 const mongoose = require('mongoose');
 const { User, Bot, Channel } = require('./models/models');
 const { SAVEUSER, JOINEDTELEGRAM, ACCOUNT, LEADERBOARD, QUESTIONS, TASK1, TASK2, TASK3 } = require('./constants/commands');
 const { isUserInChannel } = require('./socials');
-const { Account } = require('@solana/web3.js');
 const { isValidSolanaAddress, getWallet } = require('./solana');
-const { sendChoices, sendQuestions, getTask1, getTask2, handleAnswer, getTask3, handleTelegram } = require('./questions');
+const { sendQuestions, getTask1, getTask2, handleAnswer, getTask3, handleTelegram } = require('./questions');
 const { updateWalletBalance, logActivity } = require('./utils');
 const { job, reminderJob, sendRewards } = require('./job');
 const { DBCONNECTION } = require('./constants/db');
@@ -30,8 +29,8 @@ let keyboard = {
         { text: QUESTIONS}
       ]
       ],
-      resize_keyboard: true, // Optionally resize the keyboard
-      one_time_keyboard: false // Optionally hide the keyboard after a button is pressed
+      resize_keyboard: true, 
+      one_time_keyboard: false
     } 
   };
 
@@ -102,20 +101,11 @@ const isChennel = (id)=>{
 // Handle callback queries
 bot.on('callback_query', (callbackQuery) => {
     const message = callbackQuery.message;
-    const chatId = message.chat.id;
-    const messageId = message.message_id;
     const data = callbackQuery.data;
     message.text = data
     
     // Delete the original message
     handleEvent(message)
-    // bot.deleteMessage(chatId, messageId)
-    // .then(() => {
-    //     // OnMessage(message)
-    // })
-    // .catch((err) => {
-    //     console.error('Failed to delete message:', err);
-    // });
 
   });
 
@@ -132,7 +122,6 @@ const handleEvent = async (msg)=>{
        return bot.sendMessage(chatId,"❌ Wrong answer, please try again")
     }else if(msg.text.toLowerCase().trim() == botConf.captchaAnswer.toLowerCase() && userSteps[chatId] == CATPCHA){
         msg.text = ACCOUNT
-        // bot.sendMessage(chatId,msg.text.toLowerCase().trim()+" is correct!.", keyboard)
     }
     handleSteps(msg)
 }
@@ -307,8 +296,8 @@ const getKeyboard = async (msg)=>{
             { text: JOINEDTELEGRAM }
           ]
           ],
-          resize_keyboard: true, // Optionally resize the keyboard
-          one_time_keyboard: true // Optionally hide the keyboard after a button is pressed
+          resize_keyboard: true,
+          one_time_keyboard: true
         } 
       };
    }
@@ -320,8 +309,8 @@ const getKeyboard = async (msg)=>{
             { text: SAVEUSER }
           ]
           ],
-          resize_keyboard: true, // Optionally resize the keyboard
-          one_time_keyboard: true // Optionally hide the keyboard after a button is pressed
+          resize_keyboard: true, 
+          one_time_keyboard: true 
         } 
       };
    }
@@ -361,19 +350,10 @@ mongoose.connect(DBCONNECTION)
 
 
 const isOver24Hours = (pastTime) => {
-    // Get the current time
     const now = new Date();
-
-    // Convert the past time to a Date object if it's not already
     const pastDate = new Date(pastTime);
-
-    // Calculate the difference in milliseconds
     const differenceInMs = now - pastDate;
-
-    // Convert milliseconds to hours
     const differenceInHours = differenceInMs / (1000 * 60 * 60);
-
-    // Check if the difference is greater than or equal to 24 hours
     return differenceInHours >= 24;
 };
 
