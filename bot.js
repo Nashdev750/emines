@@ -103,7 +103,8 @@ bot.on('callback_query', (callbackQuery) => {
     const message = callbackQuery.message;
     const data = callbackQuery.data;
     message.text = data
-    
+    const chatId = message.chat.id;
+    logActivity(chatId,message?.text)
     // Delete the original message
     handleEvent(message)
 

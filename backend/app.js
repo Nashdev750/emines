@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const { User, Bot, Task, Payout } = require('../models/models');
+const { User, Bot, Task, Payout, Log } = require('../models/models');
 const mongoose = require('mongoose');
 const { format } = require('date-fns');
 const exceljs = require('exceljs');
@@ -12,6 +12,7 @@ const multer = require('multer');
 const path = require('path');
 const os = require('os');
 const { DBCONNECTION } = require('../constants/db');
+const { getDailyUsers, countActivitiesPerDay, getTodayQuestionClicks } = require('./utils');
 
 function getNetworkIP() {
     const interfaces = os.networkInterfaces();
@@ -57,6 +58,15 @@ const defaultConfig = {
 };
 
 // Routes
+app.get('/dashboard', async (req, res) => {
+    const logs = await Log.find().lean()
+    const users = getDailyUsers(logs)
+    const activities = countActivitiesPerDay(logs)
+    const tasks = getTodayQuestionClicks(logs)
+    
+
+    res.render('dashboard', { users, activities, tasks });
+});
 app.get('/', (req, res) => {
     res.render('login');
 });

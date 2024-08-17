@@ -75,3 +75,31 @@ textarea{
     min-width: 300px;
     min-height: 250px;
 }
+
+.cards{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 20px 0;
+}
+.card{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 4px;
+    gap: 10px;
+    width: 30%;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  
+}
+.card span{
+    text-transform: uppercase;
+    font-weight: 500;
+}
+.card span:last-child{
+    font-size: 40px !important;
+    font-weight: bolder;
+}

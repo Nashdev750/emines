@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+    <div style="width: 80%; margin: 0 auto;">
+        <div class="cards">
+            <div class="card">
+                <span>Task 1</span>
+                <span><%=tasks[0].users %></span>
+            </div>
+            <div class="card">
+                <span>Task 2</span>
+                <span><%=tasks[1].users  %></span>
+            </div>
+            <div class="card">
+                <span>Task 3</span>
+                <span><%=tasks[2].users  %></span>
+            </div>
+        </div>
+        <canvas data-users = "<%= JSON.stringify(users) %>" id="usersChart"></canvas>
+        <canvas data-users = "<%= JSON.stringify(activities) %>" id="activitiesChart"></canvas>
+    </div>
+
+    <script>
+        const jsondata = document.querySelector("#usersChart").dataset.users;
+        const data = JSON.parse(jsondata)
+        console.log(data)
+        const labels = data.map(item => item.date);
+        const usersData = data.map(item => item.users);
+
+        const ctx = document.getElementById('usersChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Users',
+                    data: usersData,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'category',
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Number of Users'
+                        }
+                    }
+                }
+            }
+        });
+
+
+        const activitydata = document.querySelector("#activitiesChart").dataset.users;
+        const activities = JSON.parse(activitydata)
+        console.log(activities)
+        const labels2 = activities.map(item => item.date);
+        const impressions = activities.map(item => item.impressions);
+
+        const ctx2 = document.getElementById('activitiesChart').getContext('2d');
+        const chart2 = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: labels2,
+                datasets: [{
+                    label: 'Number of Impressions',
+                    data: impressions,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'category',
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Number of Impressions'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
