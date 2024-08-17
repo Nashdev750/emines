@@ -8,7 +8,22 @@
     <link rel="stylesheet" href="/public/style.css">
 </head>
 <body>
+    <header>
+        <ul>
+          <li><a href="/">Dashboard</a></li>
+          <li><a href="/users">Users</a></li>
+          <li><a href="/bot-config">Bot Configurations</a></li>
+          <li><a href="/daily-tasks">Daily Tasks</a></li>
+          <li><a href="/transactions">Transactions</a></li>
+          <li><a href="/channels">Bot Channels</a></li>
+        </ul>
+        <ul>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+    </header>
+    
     <div style="width: 80%; margin: 0 auto;">
+        
         <div class="cards">
             <div class="card">
                 <span>Task 1</span>
@@ -22,6 +37,9 @@
                 <span>Task 3</span>
                 <span><%=tasks[2].users  %></span>
             </div>
+        </div>
+        <div>
+            <a href="/export-logs" style="margin-top: 20px;">Export All Logs</a>
         </div>
         <canvas data-users = "<%= JSON.stringify(users) %>" id="usersChart"></canvas>
         <canvas data-users = "<%= JSON.stringify(activities) %>" id="activitiesChart"></canvas>

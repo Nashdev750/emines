@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const { User, Bot, Task, Payout, Log } = require('../models/models');
+const { User, Bot, Task, Payout, Log, Channel } = require('../models/models');
 const mongoose = require('mongoose');
 const { format } = require('date-fns');
 const exceljs = require('exceljs');
@@ -58,7 +58,11 @@ const defaultConfig = {
 };
 
 // Routes
-app.get('/dashboard', async (req, res) => {
+
+app.get('/', async (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
     const logs = await Log.find().lean()
     const users = getDailyUsers(logs)
     const activities = countActivitiesPerDay(logs)
@@ -67,8 +71,14 @@ app.get('/dashboard', async (req, res) => {
 
     res.render('dashboard', { users, activities, tasks });
 });
-app.get('/', (req, res) => {
-    res.render('login');
+app.get('/channels', async (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+    const channels = await Channel.find().lean()
+    
+
+    res.render('channels', { channels });
 });
 app.get('/login', (req, res) => {
     res.render('login');
@@ -78,7 +88,7 @@ app.post('/login', (req, res) => {
     const { username, password } = req.body;
     if (username === 'admin' && password === 'password') {
         req.session.user = username;
-        res.redirect('/users');
+        res.redirect('/');
     } else {
         res.redirect('/login');
     }
@@ -99,6 +109,37 @@ app.get('/users', async (req, res) => {
   
     res.render('users', { users });
 });
+
+app.get('/export-logs', async (req, res) => {
+    const logs = await Log.find().lean().sort({ Date: -1 })
+    const workbook = new exceljs.Workbook();
+    const worksheet = workbook.addWorksheet('logs');
+    worksheet.columns = [
+        { header: 'ID', key: 'telegramid', width: 20 },
+        { header: 'Activity', key: 'activity', width: 20 },
+        { header: 'Date', key: 'Date', width: 20 }
+    ];
+    try {
+         // Add rows
+         logs.forEach(log => {
+            worksheet.addRow({
+                telegramid: log.telegramid,
+                activity: log.activity,
+                Date: log.Date,
+            });
+        });
+        // Set response headers
+        res.setHeader('Content-Disposition', 'attachment; filename=logs.xlsx');
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        // Write the Excel file to the response
+        await workbook.xlsx.write(res);
+        res.end();
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error'); 
+    }
+})
 
 // Route to export users to Excel
 app.get('/export-users', async (req, res) => {
