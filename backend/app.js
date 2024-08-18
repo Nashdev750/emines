@@ -165,6 +165,60 @@ app.get('/export-logs', async (req, res) => {
         res.status(500).send('Server Error'); 
     }
 })
+app.get('/export-taskers', async (req, res) => {
+    let taskers = await TaskTrack.aggregate([
+        {
+            $lookup: {
+                from: "users",           
+                localField: "userid",    
+                foreignField: "telegramid",     
+                as: "userDetails"       
+            }
+        },
+        {
+            $unwind: "$userDetails"
+        },
+        {
+            $project: {
+                question: 1,
+                Date: 1,
+                "username": "$userDetails.telegramusername",
+                "userid": 1
+            }
+        }
+    ]);
+     for (let i = 0; i < taskers.length; i++) {
+        taskers[i].Date = format(new Date(taskers[i].Date), 'MM-dd-yyyy')
+     }
+    const logs = taskers.filter(tk=>tk.username != "")
+    const workbook = new exceljs.Workbook();
+    const worksheet = workbook.addWorksheet('taskers');
+    worksheet.columns = [
+        { header: 'Username', key: 'username', width: 20 },
+        { header: 'Task', key: 'question', width: 20 },
+        { header: 'Date', key: 'Date', width: 20 }
+    ];
+    try {
+         // Add rows
+         logs.forEach(log => {
+            worksheet.addRow({
+                username: log.username,
+                question: log.question,
+                Date: log.Date,
+            });
+        });
+        // Set response headers
+        res.setHeader('Content-Disposition', 'attachment; filename=taskers.xlsx');
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        // Write the Excel file to the response
+        await workbook.xlsx.write(res);
+        res.end();
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error'); 
+    }
+})
 
 // Route to export users to Excel
 app.get('/export-users', async (req, res) => {
