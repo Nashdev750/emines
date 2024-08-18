@@ -6,6 +6,15 @@
     <title>Users Chart</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="/public/style.css">
+    <!-- Include DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<!-- Include jQuery and DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+
+
 </head>
 <body>
     <header>
@@ -38,6 +47,25 @@
                 <span><%=tasks[2].users  %></span>
             </div>
         </div>
+        <table id="userTable">
+            <thead>
+              <tr>
+                <th>Telegram Username</th>
+                <th>Task</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% taskers.forEach(user => { %>
+                <tr>
+                  <td><%= user.username %></td>
+                  <td><%= user.question %></td>
+                  <td><%= user.Date %></td>
+                  
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
         <div>
             <a href="/export-logs" style="margin-top: 20px;">Export All Logs</a>
         </div>
@@ -46,6 +74,9 @@
     </div>
 
     <script>
+          $(document).ready(function() {
+      $('#userTable').DataTable();
+    });
         const jsondata = document.querySelector("#usersChart").dataset.users;
         const data = JSON.parse(jsondata)
         console.log(data)

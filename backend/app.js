@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const { User, Bot, Task, Payout, Log, Channel } = require('../models/models');
+const { User, Bot, Task, Payout, Log, Channel, TaskTrack } = require('../models/models');
 const mongoose = require('mongoose');
 const { format } = require('date-fns');
 const exceljs = require('exceljs');
@@ -68,8 +68,32 @@ app.get('/', async (req, res) => {
     const activities = countActivitiesPerDay(logs)
     const tasks = getTodayQuestionClicks(logs)
     
-
-    res.render('dashboard', { users, activities, tasks });
+    let taskers = await TaskTrack.aggregate([
+        {
+            $lookup: {
+                from: "users",           
+                localField: "userid",    
+                foreignField: "telegramid",     
+                as: "userDetails"       
+            }
+        },
+        {
+            $unwind: "$userDetails"
+        },
+        {
+            $project: {
+                question: 1,
+                Date: 1,
+                "username": "$userDetails.telegramusername",
+                "userid": 1
+            }
+        }
+    ]);
+     for (let i = 0; i < taskers.length; i++) {
+        taskers[i].Date = format(new Date(taskers[i].Date), 'MM-dd-yyyy')
+     }
+     taskers = taskers.filter(tk=>tk.username != "")
+    res.render('dashboard', { users, activities, tasks, taskers });
 });
 app.get('/channels', async (req, res) => {
     if (!req.session.user) {
@@ -93,6 +117,7 @@ app.post('/login', (req, res) => {
         res.redirect('/login');
     }
 });
+
 
 app.get('/users', async (req, res) => {
     if (!req.session.user) {
