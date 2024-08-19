@@ -122,7 +122,7 @@ const followTweeter = (bot, chatId)=>{
             remove_keyboard: true
         }
       };
-    const msg = `🔘 Follow our <a href='https://x.com/eminemssoleng'>X (Twitter)</a> & like + retweet last post.
+    const msg = `🔘 Follow our <a href='https://x.com/eminemssol?s=21'>X (Twitter)</a> & like + retweet last post.
 
 Then submit your X username;
 Example: @username`

@@ -264,7 +264,7 @@ const handTask = async (msg)=>{
               
             }
             if(text.startsWith("telegram")){
-               return handleTelegram(bot,chatId,text,2)
+               return handleTelegram(bot,chatId,text,3)
             }
             const kb = await getKeyboard(msg)
             bot.sendMessage(chatId,"Invalid command",kb)  
