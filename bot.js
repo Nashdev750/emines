@@ -45,6 +45,7 @@ const accountCheck = {};
 const answer = 'pepsi'
 // Step 1: Handle the /start command
 bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
+    if(msg?.from?.is_bot) return
     const chatId = msg.chat.id;
     if(isChennel(chatId)) return console.log('----channel---')
     logActivity(chatId,"start")
@@ -70,6 +71,7 @@ bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
 
 // Step 4: Handle user responses
 bot.on('message', async (msg) => { 
+    if(msg?.from?.is_bot) return
     const chatId = msg.chat.id;
     if(isChennel(chatId)){
         try {
@@ -104,6 +106,7 @@ bot.on('callback_query', (callbackQuery) => {
     const data = callbackQuery.data;
     message.text = data
     const chatId = message.chat.id;
+    if(message?.from?.is_bot) return
     logActivity(chatId,message?.text)
     // Delete the original message
     handleEvent(message)
