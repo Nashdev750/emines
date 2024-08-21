@@ -258,7 +258,18 @@ const logSchema = new Schema({
         required: true
     },
 });
+const ErrorLogSchema = new Schema({
+    activity: {
+        type: String,
+        required: true
+    },
+    error: {
+        type: String,
+        required: true
+    },
+});
 const Log = model('log', logSchema);
+const ErrorLog = model('errorlog', ErrorLogSchema);
 const Task = model('task', taskSchema);
 const User = model('user',userSchema)
 const Payout = model('payout',payoutSchema)
@@ -266,4 +277,4 @@ const Bot = model('bot',botSchema)
 const TaskTrack = model('tasktrack',TaskTrackSchema)
 const Channel = model('channel',channelSchema)
 
-module.exports = {User, Payout, Bot, TaskTrack, Task, Channel, Log}
+module.exports = {User, Payout, Bot, TaskTrack, Task, Channel, Log, ErrorLog}

@@ -3,7 +3,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const { startRegister, catpchaStep, saveUserData, joinTelegramGroup, followTweeter, UpdateUserData, UpdateUserAdress, provideAdress, finishReg, getReaderBoard, getAccount} = require('./botFunctions');
 const { SUBMITDETAILS, JOINGROUP, FOLLOWTWEETER, DONE, CATPCHA, ADDRESS } = require('./constants/steps');
 const mongoose = require('mongoose');
-const { User, Bot, Channel } = require('./models/models');
+const { User, Bot, Channel, ErrorLog } = require('./models/models');
 const { SAVEUSER, JOINEDTELEGRAM, ACCOUNT, LEADERBOARD, QUESTIONS, TASK1, TASK2, TASK3 } = require('./constants/commands');
 const { isUserInChannel } = require('./socials');
 const { isValidSolanaAddress, getWallet } = require('./solana');
@@ -65,7 +65,14 @@ bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
     }
    
     // await User.findOneAndDelete({telegramid: chatId})
-    handleEvent(msg)
+    try {     
+        handleEvent(msg)
+    } catch (error) {
+        await ErrorLog.create({
+            activity: msg.text,
+            error: error.message
+        })  
+    }
 });
 
 
@@ -92,7 +99,14 @@ bot.on('message', async (msg) => {
     }
     
     // sendChoices(bot,chatId)
-    handleEvent(msg)
+    try {     
+        handleEvent(msg)
+    } catch (error) {
+        await ErrorLog.create({
+            activity: msg.text,
+            error: error.message
+        })  
+    }
 });
 
 
@@ -101,15 +115,22 @@ const isChennel = (id)=>{
 }
 
 // Handle callback queries
-bot.on('callback_query', (callbackQuery) => {
+bot.on('callback_query', async (callbackQuery) => {
     const message = callbackQuery.message;
     const data = callbackQuery.data;
     message.text = data
     const chatId = message.chat.id;
+    logActivity(chatId,message?.text) 
     if(message?.from?.is_bot) return
-    logActivity(chatId,message?.text)
     // Delete the original message
-    handleEvent(message)
+    try {     
+        handleEvent(message)
+    } catch (error) {
+        await ErrorLog.create({
+            activity: message.text,
+            error: error.message
+        })  
+    }
 
   });
 
