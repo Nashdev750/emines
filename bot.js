@@ -121,7 +121,7 @@ bot.on('callback_query', async (callbackQuery) => {
     message.text = data
     const chatId = message.chat.id;
     logActivity(chatId,message?.text) 
-    if(message?.from?.is_bot) return
+    // if(message?.from?.is_bot) return
     // Delete the original message
     try {     
         handleEvent(message)
