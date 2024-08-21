@@ -104,7 +104,7 @@ const getTask3 = async (bot, chatId)=>{
 }
 
 const sendQuestions = async (bot, chatId)=>{
-    const tasks = await Task.find().lean()
+    const tasks = await Task.find().sort({ question: 1 })
     const options = {
         reply_markup: {
             inline_keyboard: tasks.map(q => [{
