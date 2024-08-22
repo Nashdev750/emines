@@ -45,27 +45,27 @@ const accountCheck = {};
 const answer = 'pepsi'
 // Step 1: Handle the /start command
 bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
-    if(msg?.from?.is_bot) return
     const chatId = msg.chat.id;
     if(isChennel(chatId)) return console.log('----channel---')
     logActivity(chatId,"start")
-    const referralCode = match[1];
-    if (referralCode != undefined) referrals[msg.chat.id] = referralCode
-   
-    delete userSteps[chatId]
-    delete lastCap[chatId]
-    delete pending[chatId]
-    delete ingroup[chatId]
-    delete doneReg[chatId]
-    delete accountCheck[chatId]
+const referralCode = match[1];
+if (referralCode != undefined) referrals[msg.chat.id] = referralCode
+
+delete userSteps[chatId]
+delete lastCap[chatId]
+delete pending[chatId]
+delete ingroup[chatId]
+delete doneReg[chatId]
+delete accountCheck[chatId]
     for (const key in pending) {
         if (key.startsWith(chatId)) {
             delete pending[key]; 
         }
     }
-   
+    
     // await User.findOneAndDelete({telegramid: chatId})
     try {     
+        if(msg?.from?.is_bot) return
         handleEvent(msg)
     } catch (error) {
         await ErrorLog.create({
@@ -78,7 +78,6 @@ bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
 
 // Step 4: Handle user responses
 bot.on('message', async (msg) => { 
-    if(msg?.from?.is_bot) return
     const chatId = msg.chat.id;
     if(isChennel(chatId)){
         try {
@@ -100,6 +99,7 @@ bot.on('message', async (msg) => {
     
     // sendChoices(bot,chatId)
     try {     
+        if(msg?.from?.is_bot) return
         handleEvent(msg)
     } catch (error) {
         await ErrorLog.create({
