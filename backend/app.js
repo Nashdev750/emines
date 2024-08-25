@@ -170,6 +170,7 @@ app.post('/webhook', async (req, res)=>{
       wallet: "",
       activity: JSON.stringify(req.body)
     })
+    res.send({success:true})
 })
 app.get('/export-taskers', async (req, res) => {
     let taskers = await TaskTrack.aggregate([
