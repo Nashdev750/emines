@@ -268,6 +268,17 @@ const ErrorLogSchema = new Schema({
         required: true
     },
 });
+const walletTrackerSchema = new Schema({
+    wallet: {
+        type: String,
+        required: false
+    },
+    activity: {
+        type: String,
+        required: true
+    },
+});
+const WalletTracker = model('walletTracker', walletTrackerSchema);
 const Log = model('log', logSchema);
 const ErrorLog = model('errorlog', ErrorLogSchema);
 const Task = model('task', taskSchema);
@@ -277,4 +288,4 @@ const Bot = model('bot',botSchema)
 const TaskTrack = model('tasktrack',TaskTrackSchema)
 const Channel = model('channel',channelSchema)
 
-module.exports = {User, Payout, Bot, TaskTrack, Task, Channel, Log, ErrorLog}
+module.exports = {User, Payout, Bot, TaskTrack, Task, Channel, Log, ErrorLog, WalletTracker}

@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const { User, Bot, Task, Payout, Log, Channel, TaskTrack } = require('../models/models');
+const { User, Bot, Task, Payout, Log, Channel, TaskTrack, WalletTracker } = require('../models/models');
 const mongoose = require('mongoose');
 const { format } = require('date-fns');
 const exceljs = require('exceljs');
@@ -164,6 +164,12 @@ app.get('/export-logs', async (req, res) => {
         console.error(error);
         res.status(500).send('Server Error'); 
     }
+})
+app.post('/webhook', async (req, res)=>{
+    await WalletTracker.create({
+      wallet: "",
+      activity: JSON.stringify(req.body)
+    })
 })
 app.get('/export-taskers', async (req, res) => {
     let taskers = await TaskTrack.aggregate([
