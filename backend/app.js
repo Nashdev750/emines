@@ -173,7 +173,7 @@ app.post('/webhook', async (req, res)=>{
     
     await WalletTracker.create({
       wallet: "",
-      activity: messageToSendTransfer
+      activity: requestBody
     })
     res.send({success:true})
 })
