@@ -31,6 +31,7 @@ function getNetworkIP() {
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json())
 app.use('/public', express.static('public'));
 app.use(session({
     secret: 'secret-key',
