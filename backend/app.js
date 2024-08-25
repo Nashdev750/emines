@@ -13,6 +13,7 @@ const path = require('path');
 const os = require('os');
 const { DBCONNECTION } = require('../constants/db');
 const { getDailyUsers, countActivitiesPerDay, getTodayQuestionClicks } = require('./utils');
+const json = require('body-parser/lib/types/json');
 
 function getNetworkIP() {
     const interfaces = os.networkInterfaces();
@@ -166,16 +167,9 @@ app.get('/export-logs', async (req, res) => {
     }
 })
 app.post('/webhook', async (req, res)=>{
-    const requestBody = req.body
-    const Transferdescription = requestBody[0].description;
-    const Transfertimestamp = new Date(requestBody[0].timestamp * 1000).toLocaleString(); // Convert Unix timestamp to readable date-time
-    const Transfersignature = `https://xray.helius.xyz/tx/${requestBody[0].signature}`
-      // Construct the message
-    const messageToSendTransfer = 
-      `----NEW UPDATE---\n`+
-      `Description:\n${Transferdescription}\n` +
-      `Signature:\n${Transfersignature}\n` +
-      `Timestamp:\n${Transfertimestamp}`
+    const requestBody = JSON.stringify(req.body)
+    if(requestBody == "{}") return res.send({success:false})
+    
     await WalletTracker.create({
       wallet: "",
       activity: messageToSendTransfer
