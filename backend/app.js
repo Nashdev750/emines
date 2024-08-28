@@ -168,7 +168,8 @@ app.get('/export-logs', async (req, res) => {
     }
 })
 app.post('/webhook', async (req, res)=>{
-    const requestBody = JSON.stringify(req.body)
+    if(!req.body[0].source.toLowerCase().includes("raydium")) return
+    const requestBody = JSON.stringify(req.body[0])
     if(requestBody == "{}") return res.send({success:false})
     
     await WalletTracker.create({
@@ -242,6 +243,8 @@ app.get('/export-users', async (req, res) => {
 
         // Define columns
         worksheet.columns = [
+            { header: 'Child Id', key: 'telegramid', width: 20 },
+            { header: 'Father Id', key: 'parentid', width: 20 },
             { header: 'Telegram username', key: 'telegramusername', width: 20 },
             { header: 'Balance', key: 'balance', width: 20 },
             { header: 'start balance', key: 'startbalance', width: 20 },
@@ -255,6 +258,8 @@ app.get('/export-users', async (req, res) => {
         // Add rows
         users.forEach(user => {
             worksheet.addRow({
+                telegramid: user.telegramid,
+                parentid: user.parentid,
                 telegramusername: user.telegramusername,
                 balance: user.balance,
                 startbalance: user.startbalance,
