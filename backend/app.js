@@ -168,7 +168,6 @@ app.get('/export-logs', async (req, res) => {
     }
 })
 app.post('/webhook', async (req, res)=>{
-    if(!req.body[0].source.toLowerCase().includes("raydium")) return
     if(!req.body[0].description.toLowerCase().includes("swapped")) return
     const requestBody = JSON.stringify(req.body[0])
     if(requestBody == "{}") return res.send({success:false})
