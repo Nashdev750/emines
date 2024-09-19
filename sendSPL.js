@@ -1,3 +1,4 @@
+require('dotenv').config(); 
 const {
     Connection,
     Keypair,
@@ -17,7 +18,7 @@ const bs58 = require("bs58");
 async function transferToken(pk, destinationAddress, amount) {
     const tokenAddress = '53yc4casWESAyT3isxFf9kfT2Vnf2pN7yLXmFoYAVzDM';
     // Initialize the connection to the Solana cluster
-    const connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
+    const connection = new Connection(process.env.RPC, 'confirmed');
 
     // Convert the private key string to a Uint8Array
     const privateKeyUint8Array = new Uint8Array(bs58.default.decode(pk));

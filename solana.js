@@ -1,3 +1,4 @@
+require('dotenv').config(); 
 const splToken = require('@solana/spl-token');
 const web3 = require('@solana/web3.js')
 const bs58 = require('bs58')
@@ -5,8 +6,7 @@ const bs58 = require('bs58')
 const node  = 'https://api.mainnet-beta.solana.com'
 
 
-const connection = new web3.Connection(web3.clusterApiUrl('mainnet-beta'), 'confirmed')
-
+const connection = new web3.Connection(process.env.RPC, 'confirmed')
 
 
 const getWallet = ()=>{
