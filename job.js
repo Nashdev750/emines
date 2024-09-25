@@ -14,11 +14,10 @@ const findUsersWithTodayGrant = async () => {
         today.setHours(0, 0, 0, 0);
         const newDate = format(new Date(today), 'MM-dd-yyyy')
         const users = await User.find({ nextgrant: newDate }).lean();
-
+        console.log('---->', users.length)
         return users;
     } catch (error) {
         console.error('Error finding users with today\'s grant:', error);
-        throw error;
     }
 };
 
@@ -38,10 +37,16 @@ const job = async ()=>{
                 const decedant = decedants[j];
                 try {
                     console.log('--sleep 10secs ---')
-                    await sleep(10000)
-                    const bal = await getTokenBalance(decedant.address) - decedant.startbalance
+                    await sleep(2000)
+                    let bal = 0
+                    try {
+                        console.log('Get d balance')
+                        await getTokenBalance(decedant.address) - decedant.startbalance
+                        console.log('end Get d balance')
+                    } catch (error) {
+                        console.log(error.message)
+                    }
                     console.log('--sleep 10secs ---')
-                    await sleep(10000)
                     console.log('decedant bal', bal)
                     if(bal > 0) reward += bal * fp
                 } catch (error) {
@@ -61,15 +66,17 @@ const job = async ()=>{
             } catch (error) {
                 console.log(error.message)
             }
-            if(reward > 0){
+            if(reward > 0 && user.address){
                 await Payout.create({
                     telegramid: user.telegramid,
                     address: user.address,
-                    telegramusername: user.telegramusername,
+                    telegramusername: user.telegramusername ? user.telegramusername : "unkown",
                     amount: reward
                 })
             }
-            console.log("reward ---> ",reward)
+            const nxtg = await getRandomFutureDate()
+            await User.findOneAndUpdate({telegramid: user.telegramid},{nextgrant: nxtg})
+            console.log("reward ---> "+i+":",reward)
         }
         // send tokens
         console.log('---send tokens--')
@@ -113,11 +120,9 @@ const sendRewards = async ()=>{
         try {
             try {
                 console.log('--sleep 10secs ---')
-                await sleep(10000)
+                await sleep(2000)
                 await transferToken(bot.privatekey,payout.address,payout.amount)
                 await Payout.findByIdAndUpdate({_id:payout._id},{status:true})
-                const nxtg = await getRandomFutureDate()
-                await User.findOneAndUpdate({telegramid: payout.telegramid},{nextgrant: nxtg})
                 console.log('--- token sent ---')
             } catch (error) {
                 console.log(error.message)

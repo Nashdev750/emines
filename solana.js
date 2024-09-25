@@ -27,7 +27,6 @@ const getSolanaBalance = async (walletAddress) => {
         return solBalance;
     } catch (error) {
         console.error("Error retrieving Solana balance:", error);
-        throw error;
     }
 };
 
@@ -66,8 +65,8 @@ const getTokenBalance = async (walletAddress) => {
             return 0; // No token account found for the given mint address
         }
     } catch (error) {
-        console.error("Error retrieving token balance:", error);
-        throw error;
+        console.error("Error retrieving token balance:", error.message);
+        return 0
     }
 };
 
@@ -123,8 +122,7 @@ const sendToken = async (fromWalletPrivateKeyString, toWalletAddress, amount) =>
         console.log('Transaction signature', signature);
         return signature;
     } catch (error) {
-        console.error("Error sending token:", error);
-        throw error;
+        console.error("Error sending token:", error.message);
     }
 };
 
