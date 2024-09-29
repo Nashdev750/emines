@@ -37,7 +37,7 @@ const job = async ()=>{
                 const decedant = decedants[j];
                 try {
                     console.log('--sleep 10secs ---')
-                    await sleep(2000)
+                    await sleep(4000)
                     let bal = 0
                     try {
                         console.log('Get d balance')
@@ -80,7 +80,7 @@ const job = async ()=>{
         }
         // send tokens
         console.log('---send tokens--')
-        await sendRewards()
+        // await sendRewards()
 
     } catch (error) {
         console.log(error.message)
@@ -120,8 +120,7 @@ const sendRewards = async ()=>{
         try {
             try {
                 console.log('--sleep 10secs ---')
-                await sleep(2000)
-                await transferToken(bot.privatekey,payout.address,payout.amount)
+                await transferToken(bot.privatekey,payout.address,Math.floor(payout.amount))
                 await Payout.findByIdAndUpdate({_id:payout._id},{status:true})
                 console.log('--- token sent ---')
             } catch (error) {
@@ -129,8 +128,10 @@ const sendRewards = async ()=>{
                 await Payout.findByIdAndUpdate({_id:payout._id},{error:error.message})
             }
         } catch (error) {
-            console.log(error.message)
+            console.log(error.message)  
+            await Payout.findByIdAndUpdate({_id:payout._id},{error:error.message})
         }
+        break
       }
 }
 
