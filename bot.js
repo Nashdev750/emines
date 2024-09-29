@@ -348,7 +348,7 @@ mongoose.connect(DBCONNECTION)
 .then(async ()=>{
     console.log("connected")
     setInterval(job,1000*60*60*24)
-    setInterval(sendRewards,60000)
+    // setInterval(sendRewards,60000)
     
     const [publickey, secretKeyString] = getWallet()
     try {

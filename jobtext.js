@@ -8,5 +8,5 @@ const { TaskTrack } = require("./models/models");
 
 mongoose.connect(DBCONNECTION)
 .then(async ()=>{
-    job()
+    await sendRewards()
 })

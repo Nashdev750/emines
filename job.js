@@ -1,6 +1,6 @@
 const { User, Payout, Bot } = require('./models/models');
 const { transferToken } = require('./sendSPL');
-const { getTokenBalance, sendToken } = require('./solana');
+const { getTokenBalance, sendToken, isValidSolanaAddress } = require('./solana');
 const { getRandomFutureDate } = require('./utils');
 const { format } = require('date-fns');
 
@@ -113,26 +113,21 @@ const GetUserBalance = async (user)=>{
 }
 
 const sendRewards = async ()=>{
-      const payouts = await Payout.find({status: false})
-      const bot = await Bot.findOne()
-      for (let i = 0; i < payouts.length; i++) {
-        const payout = payouts[i];
+        const payout = await Payout.findOne({status: false})
+        const bot = await Bot.findOne()
         try {
-            try {
-                console.log('--sleep 10secs ---')
-                await transferToken(bot.privatekey,payout.address,Math.floor(payout.amount))
-                await Payout.findByIdAndUpdate({_id:payout._id},{status:true})
-                console.log('--- token sent ---')
-            } catch (error) {
-                console.log(error.message)
-                await Payout.findByIdAndUpdate({_id:payout._id},{error:error.message})
-            }
+            console.log('--sleep 10secs ---')
+            console.log(payout.address)
+            await transferToken(bot.privatekey,payout.address,Math.floor(payout.amount))
+            await Payout.findByIdAndUpdate({_id:payout._id},{status:true})
+            console.log('--- token sent ---')
         } catch (error) {
-            console.log(error.message)  
-            await Payout.findByIdAndUpdate({_id:payout._id},{error:error.message})
+            console.log('--- token sent error---')
+            console.log(error)
+            await Payout.findByIdAndUpdate({_id:payout._id},{error:error.message,status:true})
         }
-        break
-      }
+     
+        console.log('break')
 }
 
 const reminderJob = async (bt)=>{
@@ -143,3 +138,4 @@ const reminderJob = async (bt)=>{
 }
 
 module.exports = {GetUserBalance, job, reminderJob, sendRewards}
+
